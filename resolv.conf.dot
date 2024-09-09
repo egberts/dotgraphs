@@ -1,0 +1,61 @@
+
+
+strict digraph {
+    start [ label="start" size=12 shape=Mdiamond ]
+    exists [ label="/etc/resolv.conf exists?" ]
+    owner [ label="resolv.conf has\nknown owner?" ]
+
+    start -> exists
+    exists -> overwrite [ label="no" ]
+    exists -> owner [ label="yes" ]
+
+    systemdresolved_running [ label="systemd-resolved running?" ]
+    resolvconf_source [ label="resolvconf source\nis NetworkManager?" ]
+
+    networkmanager_running_with_systemdresolved [ label="NetworkManager\nrunning?" ]
+    networkmanager_running_by_resolvconf [ label="NetworkManager\nrunning?" ]
+
+    nm_backend_is_systemdresolved [ label="NetworkManager backend\nis systemd-resolved" ]
+    networkmanager_running [ label="NetworkManager running?" ]
+
+    systemdresolved_running -> networkmanager_running_with_systemdresolved [ label="yes" ]
+    systemdresolved_running -> overwrite [ label="no" ]
+    resolvconf_binary [ label="resolvconf binary available?" ]
+
+    owner -> networkmanager_running [ label="NetworkManager" ]
+    owner -> systemdresolved_running [ label="systemd-resolved" ]
+    owner -> resolvconf_source [ label="resolvconf" ]
+    owner -> overwrite [ label="no" ]
+
+    
+    networkmanager_running_with_systemdresolved -> use_systemdresolved [ label="no" ]
+    networkmanager_running_with_systemdresolved -> nm_backend_is_systemdresolved [ label="yes" ]
+
+
+    networkmanager_running -> use_networkmanager[ label="yes" ]
+
+    networkmanager_running -> overwrite [ label="no" ]
+
+
+    resolvconf_binary -> overwrite [ label="no" ]
+    resolvconf_binary -> use_resolvconf [ label="yes" ]
+
+
+    resolvconf_source -> resolvconf_binary [ label="no" ]
+    resolvconf_source -> networkmanager_running_by_resolvconf [ label="yes" ]
+
+    networkmanager_running_by_resolvconf -> use_networkmanager [ label="yes" ]
+    networkmanager_running_by_resolvconf -> resolvconf_binary [ label="no" ]
+
+    nm_backend_is_systemdresolved -> use_networkmanager [ label="yes" ]
+    nm_backend_is_systemdresolved -> use_systemdresolved [ label="no" ]
+    
+    subgraph {
+    use_systemdresolved [ label="Use systemd-resolved" shape=doubleoctagon ]
+    use_networkmanager [ label="Use NetworkManager" shape=doubleoctagon ]
+    overwrite [ label="Overwrite resolv.conf" shape=doubleoctagon ]
+    use_resolvconf [ label="Use resolvconf" shape=doubleoctagon ]
+    }
+
+}
+

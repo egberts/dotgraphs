@@ -1,2 +1,7 @@
 # dotgraphs
-Examples of dotgraphs
+
+
+Examples of dotgraphs:
+
+   * `resolv.conf`
+
