@@ -1,0 +1,66 @@
+
+
+strict digraph {
+    start [ label="start" size=12 shape=Mdiamond ]
+    exists [ label="/etc/resolv.conf exists?" ]
+
+    start -> exists
+    exists -> overwrite [ label="no" ]
+    exists -> resolvconf_symlinked_systemdresolved [ label="yes" ]
+
+    resolvconf_symlinked_systemdresolved [ label="resolv.conf is symlink\nto systemd-resolved?" ]
+
+    resolv_conf_contains_resolvconf [ label="resolv.conf contains 'resolvconf'?" ]
+    systemdresolved_running [ label="systemd-resolved running?" ]
+
+    resolvconf_symlinked_systemdresolved -> resolv_conf_contains_resolvconf [ label="no" ]
+    resolvconf_symlinked_systemdresolved -> systemdresolved_running [ label="yes" ]
+
+    resolv_conf_contains_nm [ label="resolv.conf contains\n'NetworkManager'?" ]
+    resolvconf_source_is_nm [ label="resolvconf source\nis NetworkManager?" ]
+    networkmanager_running_with_systemdresolved [ label="NetworkManager\nrunning?" ]
+
+    resolv_conf_contains_resolvconf -> resolv_conf_contains_nm [ label="no" ]
+    resolv_conf_contains_resolvconf -> resolvconf_source_is_nm [ label="yes" ]
+    systemdresolved_running -> overwrite [label="no" ]
+    systemdresolved_running -> networkmanager_running_with_systemdresolved [label="yes" ]
+
+    networkmanager_running [ label="NetworkManager running?" ]
+    networkmanager_running_by_resolvconf [ label="NetworkManager\nrunning?" ]
+    nm_backend_is_systemdresolved [ label="NetworkManager backend\nis systemd-resolved?" ]
+
+    resolv_conf_contains_nm -> overwrite [ label="no" ]
+    resolv_conf_contains_nm -> networkmanager_running [ label="yes" ]
+    resolvconf_source_is_nm -> networkmanager_running_by_resolvconf [ label="yes" ]
+    resolvconf_source_is_nm -> use_resolvconf [ label="no" ]
+    networkmanager_running_with_systemdresolved -> nm_backend_is_systemdresolved [ label="yes" ]
+    networkmanager_running_with_systemdresolved -> use_systemdresolved [ label="no" ]
+
+    subgraph {
+        overwrite [ label="Overwrite resolv.conf" shape=doubleoctagon ]
+        use_networkmanager [ label="Use NetworkManager" shape=doubleoctagon ]
+        use_resolvconf [ label="Use resolvconf" shape=doubleoctagon ]
+        use_systemdresolved [ label="Use systemd-resolved" shape=doubleoctagon ]
+    }
+    networkmanager_running -> overwrite [ label="no" ]
+    networkmanager_running -> use_networkmanager [ label="yes" ]
+    networkmanager_running_by_resolvconf -> use_networkmanager [ label="yes" ]
+    networkmanager_running_by_resolvconf -> use_resolvconf [ label="no" ]
+    nm_backend_is_systemdresolved -> use_networkmanager [ label="yes" ]
+    nm_backend_is_systemdresolved -> use_systemdresolved [ label="no" ]
+    
+    nm_backend_is_systemdresolved2 [ label="NetworkManager backend\nis systemd-resolved" ]
+
+    use_networkmanager -> nm_backend_is_systemdresolved2
+
+    systemdresolved_running2 [ label="systemd-resolved running?" ]
+
+    overwrite -> systemdresolved_running2 
+    nm_backend_is_systemdresolved2 -> systemdresolved_running2 [ label="no" ]
+    use_resolvconf -> systemdresolved_running2 
+
+    also_configure_systemdresolved [ label="Also configure systemd-resolved" ]
+
+    systemdresolved_running2 -> also_configure_systemdresolved
+}
+
