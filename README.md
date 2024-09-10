@@ -13,3 +13,13 @@ Examples of dotgraphs:
 # Dependencies
 
 *  graphviz (`dot`) 
+
+# References
+
+* [Dot User Manual](https://www.graphviz.org/pdf/dotguide.pdf), by Emden R. Gansner and Eleftherios Koutsofios and Stephen North, January 5, 2015
+* [Examples @Grevian.Org](https://graphs.grevian.org/example)
+* [Online Graphviz Dotgraph Visual Editor](http://magjac.com/graphviz-visual-editor/)
+* [How to avoid crossover edges](https://renenyffenegger.ch/notes/tools/Graphviz/examples/edge-crossing)
+* [Git stages](https://sketchviz.com/@egberts/843badb37e0f9f4b87043bd50ebe2402/cf7c18b393bb0137116f8209669d365f8c916c2b.sketchy.png)
+* [Handsketching Dotgraph](https://sketchviz.com/@egberts/843badb37e0f9f4b87043bd50ebe2402/)
+* [Viewing large dotgraph](https://egbert.net/blog/tags/dot.html)
